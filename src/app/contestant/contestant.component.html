@@ -1,0 +1,24 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th>Full Name</th>
+        <th>Date Of Birth</th>
+        <th>District</th>
+        <th>Gender</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="objContestantListLength > 0">
+        <tr *ngFor="let contest of objContestantList">
+            <td>{{contest.firstname+" "+contest.lastname}}</td>
+            <td>{{contest.dob}}</td>
+            <td>{{contest.district}}</td>
+            <td>{{contest.gender}}</td>
+            <td>
+            <a class="btn btn-primary" data-toggle="modal" (click)="  showPromptEdit(contest)">Edit</a>
+            &nbsp;
+            <a data-toggle="modal" class="btn btn-danger">Delete</a></td>
+        </tr>       
+    </tbody>
+  </table>
+<a class="btn btn-success" data-toggle="modal" (click)="  showPromptAdd()">Add New</a>

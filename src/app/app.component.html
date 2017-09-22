@@ -1,0 +1,25 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<!-- <h1>{{title}}</h1> -->
+ <!-- <nav>
+     <a (click)='activeMenu("dashboard")' [class.selectedMenu]="active === 'dashboard'" routerLink="/dashboard">Dashboard</a>
+     <a (click)='activeMenu("heroes")' [class.selectedMenu]="active === 'heroes'"  routerLink="/heroes">Heroes</a>
+   </nav>
+  
+   <router-outlet></router-outlet> -->
+
+   <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a routerLink="/contestant" class="navbar-brand">Contestant</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a routerLink="/contestant">Contestant</a></li>
+        <li><a  routerLink="/dashboard">Contestant Rating</a></li>
+        <li><a routerLink="/dashboard">Photo Gallery</a></li>
+        <li><a routerLink="/dashboard">Graph</a></li>
+      </ul>
+    </div>
+  </nav>
+    <appContestant></appContestant>  
+   
+
