@@ -10,6 +10,9 @@ import { DialogComponent, DialogService } from "ng2-bootstrap-modal";
 
 import { FileUploadComponent } from "../common/file-upload/file-upload.component";
 
+import { PromptComponent } from "../common/prompt/prompt.component";
+
+
 @Component({
     selector: 'appContestant',
     templateUrl: 'Contestant.component.html'
@@ -54,7 +57,7 @@ export class ContestantComponent  implements AfterViewInit {
 
     promptMessage:string = '';
 
-    constructor(@Inject(DOCUMENT) private document: Document,private contestantService:ContestantService) {
+    constructor(@Inject(DOCUMENT) private document: Document,private contestantService:ContestantService,private dialogService:DialogService) {
         ;
         this.objContestantAdd = new Contestant();
         this.addIsActive = false;        
@@ -225,6 +228,49 @@ export class ContestantComponent  implements AfterViewInit {
             this.showEditDialog=!this.showEditDialog;
             this.savingEditData=!this.savingEditData;
         }
+    }
+
+    deleteMobileUser(e,obj: Contestant) {
+          e.stopPropagation();
+            //We get dialog result
+            let operation: Observable<Contestant>;
+            operation = this.contestantService.deleteContestant(obj);
+            operation.subscribe(
+            user => {
+                // this.goToTop();
+                this.reloadData();
+            },
+            error => {
+                // this.alertService.alertWarning(error)
+                alert(error);
+            });
+
+
+    }
+
+      deleteContestant(e,obj: Contestant) {
+          e.stopPropagation();
+        let disposable = this.dialogService.addDialog(PromptComponent, {
+            title: 'Delete',
+            message: 'Do you want to delete?'
+        })
+        .subscribe((isConfirmed) => {
+            //We get dialog result
+            if (isConfirmed) {
+                let operation: Observable<Contestant>;
+                operation = this.contestantService.deleteContestant(obj);
+                operation.subscribe(
+                    user => {
+                        // this.goToTop();
+                        this.reloadData();
+                    },
+                    error => {
+                        // this.alertService.alertWarning(error)
+                        alert(error);
+                    });
+            }
+
+        });
     }
     
   

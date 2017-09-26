@@ -58,26 +58,19 @@ export class ContestantService {
             .map((response: Response) => <Contestant>response.json().Contestant);
     }
 
-    // updateVideo(obj: Contestant): Observable<Contestant> {
-    //     let formData: FormData = new FormData();
-      
-    //     formData.append('id', obj.id);
-    //     formData.append('firstname', obj.firstname);
-    //     formData.append('lastname', obj.lastname);
-    //     formData.append('dob',obj.dob);
-    //     formData.append('is_active', obj.is_active);
-    //     formData.append('district_id', obj.district_id);
-    //     formData.append('gender', obj.gender)
-    //     formData.append('photo_url', obj.photo_url)
-    //     formData.append('address', obj.address)
-    //     let headers = new Headers();
-    //     headers.append('Accept', 'application/json');
-
-    //     let options = new RequestOptions({ headers: headers });
-    //     return this.http
-    //         .post('localhost/contestant/Contestant/contestant/'+obj.id, formData, options)
-    //         .map((response: Response) => <Contestant>response.json().Contestant);
-    // }
+    deleteContestant(obj:Contestant):Observable<Contestant>{        
+        let formData=new FormData();
+        formData.append('id',obj.contestant_id);
+        let headers = new Headers();
+        headers.append('Accept', 'application/json');
+        // let authToken = this.loginService.getToken();
+        // headers.append('Authorization', authToken);
+        let options = new RequestOptions({ headers: headers });
+        return this.http
+            .post('http://localhost/contestant/index.php/apis/contestant/delete/'+obj.contestant_id,formData, options)
+            .map((response: Response) => <Contestant>response.json().User)
+            // .catch(this.exceptionService.handleError);
+    }
 
 
     

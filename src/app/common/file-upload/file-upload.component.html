@@ -1,0 +1,82 @@
+<div style="width:100; height:100"class="image-preview-area" *ngIf="showImagePreviewArea">
+    <img width="100"   height="100"  *ngIf="_imageSrc" [src]="_imageSrc" alt="" src="">
+</div>
+<div class="upload-instructions ">
+    
+    <div *ngIf="_imageUploadComponent" class="imageUpload">
+        <!-- <p>{{_imageUploadTitle}}</p> -->
+        <input #imageUploadInput type="file" name="photo" accept="image/*" (change)="handleImageUpload()">
+        <!-- <label>Browse</label> -->
+        <!-- <output style="width:100; height:100" for="photo"></output> -->
+        <!-- <div class="uploaded-name-holder" *ngIf="_hasImage">
+            <label>Image Name</label>
+            <input *ngIf="!_showDeleteImage" disabled="" type="text" placeholder="" [value]="_imageFileName">
+            <span class="confirm-delete" *ngIf="_showDeleteImage">
+              Confirm delete? <i class="confirm-yes" (click)="deleteImage()"> Y</i> / <i class="confirm-no"
+                                                                                         (click)="toggleDeleteImage()">N</i></span>
+            <a href="javascript:void(0)" (click)="toggleDeleteImage()" *ngIf="!_showDeleteImage"
+               class="deleteInfoImg btn-delete">×</a>
+        </div> -->
+    </div>
+    <div *ngIf="_pdfUploadComponent" class="pdfUpload">
+        <p>{{_pdfUploadTitle}}</p>
+        <input #pdfUploadInput type="file" name="pdf" accept="pdf/*" (change)="handlePdfUpload()">
+        <label>Browse</label>
+        <output for="pdf"></output>
+        <div class="uploaded-name-holder" *ngIf="_hasPdf">
+            <label>File Name</label>
+            <input *ngIf="!_showDeletePdf" disabled="" type="text" placeholder="" [value]="_pdfFileName">
+            <span class="confirm-delete" *ngIf="_showDeletePdf">
+              Confirm delete? <i class="confirm-yes" (click)="deletePdf()"> Y</i> / <i class="confirm-no"
+                                                                                       (click)="toggleDeletePdf()">N</i></span>
+            <a href="javascript:void(0)" (click)="toggleDeletePdf()" *ngIf="!_showDeletePdf"
+               class="deleteInfoImg btn-delete">×</a>
+        </div>
+    </div>
+    <div *ngIf="_excelUploadComponent" class="pdfUpload">
+        <p>{{_excelUploadTitle}}</p> <!--.csv-->
+        <input #excelUploadInput type="file" name="excel" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" (change)="handleExcelUpload()">
+        <label>Browse</label>
+        <output for="excel"></output>
+        <div class="uploaded-name-holder" *ngIf="_hasExcel">
+            <label>File Name</label>
+            <input *ngIf="!_showDeleteExcel" disabled="" type="text" placeholder="" [value]="_excelFileName">
+            <span class="confirm-delete" *ngIf="_showDeleteExcel">
+              Confirm delete? <i class="confirm-yes" (click)="deleteExcel()"> Y</i> / <i class="confirm-no"
+                                                                                       (click)="toggleDeleteExcel()">N</i></span>
+            <a href="javascript:void(0)" (click)="toggleDeleteExcel()" *ngIf="!_showDeleteExcel" class="deleteInfoImg btn-delete">×</a>
+        </div>
+    </div>
+
+    <div *ngIf="_videoUploadComponent" class="pdfUpload">
+        <p>{{_videoUploadTitle}}</p>
+        <input #videoUploadInput type="file" name="video" accept="video/mp4,video/x-m4v,video/*" (change)="handleVideoUpload()">
+        <label>Browse</label>
+        <output for="video"></output>
+        <div class="uploaded-name-holder" *ngIf="_hasVideo">
+            <label>File Name</label>
+            <input *ngIf="!_showDeleteVideo" disabled="" type="text" placeholder="" [value]="_videoFileName">
+            <span class="confirm-delete" *ngIf="_showDeleteVideo">
+              Confirm delete? <i class="confirm-yes" (click)="deleteVideo()"> Y</i> / <i class="confirm-no"
+                                                                                       (click)="toggleDeleteVideo()">N</i></span>
+            <a href="javascript:void(0)" (click)="toggleDeleteVideo()" *ngIf="!_showDeleteVideo" class="deleteInfoImg btn-delete">×</a>
+        </div>
+    </div>
+
+    <div *ngIf="_audioUploadComponent" class="pdfUpload">
+        <p>{{_audioUploadTitle}}</p>
+        <input #audioUploadInput type="file" name="audio" accept="audio/*" (change)="handleAudioUpload()">
+        <label>Browse</label>
+        <output for="audio"></output>
+        <div class="uploaded-name-holder" *ngIf="_hasAudio">
+            <label>File Name</label>
+            <input *ngIf="!_showDeleteAudio" disabled="" type="text" placeholder="" [value]="_audioFileName">
+            <span class="confirm-delete" *ngIf="_showDeleteAudio">
+              Confirm delete? <i class="confirm-yes" (click)="deleteAudio()"> Y</i> / <i class="confirm-no"
+                                                                                       (click)="toggleDeleteAudio()">N</i></span>
+            <a href="javascript:void(0)" (click)="toggleDeleteAudio()" *ngIf="!_showDeleteAudio" class="deleteInfoImg btn-delete">×</a>
+        </div>
+    </div>
+
+
+</div>

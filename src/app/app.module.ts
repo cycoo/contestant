@@ -13,7 +13,7 @@ import { ContestantService } from './models/contestant.service';
 
 import { AppComponent } from './app.component';
 import { ContestantComponent } from './contestant/contestant.component';
-import { PromptComponent } from './prompt/prompt.component';
+import { PromptComponent } from './common/prompt/prompt.component';
 /*common*/
 import { DialogComponent } from './common/dialog/dialog.component';
 import {FileUploadComponent} from "./common/file-upload/file-upload.component";

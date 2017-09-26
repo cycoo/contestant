@@ -17,7 +17,7 @@
             <td>
             <a class="btn btn-primary" data-toggle="modal" (click)="  showPromptEdit(contest)">Edit</a>
             &nbsp;
-            <a data-toggle="modal" data-target=".modal" class="btn btn-danger">Delete</a></td>
+            <a (click)="deleteContestant($event,contest)" data-toggle="modal" data-target=".modal" class="btn btn-danger">Delete</a></td>
         </tr>       
     </tbody>
   </table>
