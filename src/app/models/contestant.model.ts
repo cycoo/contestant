@@ -1,5 +1,6 @@
 export class Contestant {
-  contestant_id: number;
+  id:number;
+  contestant_id: any;
   firstname: string;
   lastname: string;
   dob: string;
@@ -8,4 +9,9 @@ export class Contestant {
   gender: string;
   photo_url: string;
   address:string;
+
+  // image
+  PhotoPreview:string;
+  photo:File;
+  ImageDeletedOnEdit:boolean=false;
 }

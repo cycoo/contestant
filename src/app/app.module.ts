@@ -6,18 +6,25 @@ import { AppRoutingModule }   from './app-routing.module';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { CommonModule } from "@angular/common";
 import{SelectModule} from 'ng2-select';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 import { ContestantService } from './models/contestant.service';
 
 import { AppComponent } from './app.component';
 import { ContestantComponent } from './contestant/contestant.component';
 import { PromptComponent } from './prompt/prompt.component';
+/*common*/
+import { DialogComponent } from './common/dialog/dialog.component';
+import {FileUploadComponent} from "./common/file-upload/file-upload.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     ContestantComponent,
-    PromptComponent
+    PromptComponent,
+    DialogComponent,
+    FileUploadComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +33,8 @@ import { PromptComponent } from './prompt/prompt.component';
     AppRoutingModule,
     BootstrapModalModule,
     CommonModule,
-    SelectModule
+    SelectModule,
+    BrowserAnimationsModule
   ],
   entryComponents: [
     PromptComponent

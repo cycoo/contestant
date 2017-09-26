@@ -1,4 +1,6 @@
- <!-- <div class="modal-dialog"> 
+
+<div class="overlay" (click)="close()">
+<!-- <div class="modal-dialog"> 
    <div class="modal-content">
     <div class="modal-header">
       <button type="button" class="close" (click)="close()">&times;</button>
@@ -21,20 +23,20 @@
         <h4 class="modal-title">{{title}}</h4>
     </div>
     <div class="modal-body">
-        <form method="post" enctype="multipart/form-data">
+        <form (ngSubmit)="updateContestant()" name="editContestant" enctype="multipart/form-data">
             <div class="form-group">
             <label for="firstname">First Name</label>
-            <input data-validation="firstname" type="firstname" class="form-control" name="firstname" id="firstname" value="{{objContestantEdit.firstname}}">
+            <input data-validation="firstname" type="firstname" class="form-control" name="firstname" id="firstname" [(ngModel)]="objContestantEdit.firstname">
             </div>
             <div class="form-group">
             <label for="lastname">Last Name</label>
-            <input data-validation="lastname" type="text" class="form-control" name="lastname" id="lastname" value="{{objContestantEdit.lastname}}">
+            <input data-validation="lastname" type="text" class="form-control" name="lastname" id="lastname" [(ngModel)]="objContestantEdit.lastname">
             </div>
 
             <div class="form-group">
             <label for="dob">Date Of Birth</label>		    
             <input data-validation="dob" type="text" class="form-control dob" name="dob" data-provide="datepicker" 
-            value="{{objContestantEdit.dob}}">
+            [(ngModel)]="objContestantEdit.dob">
             </div>
 
             <div class="isActive">
@@ -43,9 +45,9 @@
 
             <div class="form-group">
             <label for="district">District</label>
-                <select data-validation="required" type="text" class="form-control" name="district" id="district" > 
+                <select [(ngModel)]="objContestantEdit.district_id" data-validation="required" type="text" class="form-control" name="district" id="district" > 
             
-                <option *ngFor="let value of objDistrictList" value="{{value.id}}" (selected)="seletedEdit(objContestantEdit.district_id,district,edit)" [selected]="objContestantEdit.district_id==value.id">{{value.name}}</option>
+                <option *ngFor="let value of objDistrictList" value="{{value.id}}"  (click)="selectDistrict(objContestantEdit.district_id,district,edit)" [selected]="objContestantEdit.district_id==value.id">{{value.name}}</option>
             
                 </select> 
             </div>
@@ -72,11 +74,17 @@
 
             <div class="form-group">
             <label for="address">Address</label>
-            <textarea data-validation="address" class="form-control" name="address" id="address" >{{objContestantEdit.address}}</textarea> 
+            <textarea data-validation="address" class="form-control" name="address" id="address" [(ngModel)]="objContestantEdit.address" >{{objContestantEdit.address}}</textarea> 
             </div>	
 
             <div class="form-group">
-            <button type="submit" class="btn btn-success">Save</button>
+            <!-- <button type="submit" class="btn btn-success" >Save</button> -->
+            <button class="btn btn-success" type="submit" [disabled]="savingAddData">
+                        
+                        <span *ngIf="!savingAddData">Save</span>
+                        <span *ngIf="savingAddData">Saving...</span>
+            </button>
+                    
             <a  class="btn btn-danger" (click)="close()">Cancel</a>
             </div>
         </form>
@@ -147,4 +155,5 @@
         </form>
     </div>
     </div>
+</div>
 </div>

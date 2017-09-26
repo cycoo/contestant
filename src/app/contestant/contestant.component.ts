@@ -6,9 +6,9 @@ import { Contestant} from '../models/contestant.model';
 
 import { ContestantService} from '../models/contestant.service';
 
-import { PromptComponent } from '../prompt/prompt.component';
-
 import { DialogComponent, DialogService } from "ng2-bootstrap-modal";
+
+import { FileUploadComponent } from "../common/file-upload/file-upload.component";
 
 @Component({
     selector: 'appContestant',
@@ -16,7 +16,10 @@ import { DialogComponent, DialogService } from "ng2-bootstrap-modal";
 })
 
 
-export class ContestantComponent extends DialogComponent<Contestant, string> implements AfterViewInit {
+export class ContestantComponent  implements AfterViewInit {
+    showDialog = false;
+    showEditDialog=false;
+
     objContestantAdd: Contestant = new Contestant();
     objContestantEdit: Contestant = new Contestant();
     objContestantList: Array<Contestant> = new Array<Contestant>();
@@ -32,7 +35,15 @@ export class ContestantComponent extends DialogComponent<Contestant, string> imp
     savingAddData: boolean = false;
     savingEditData: boolean = false;
 
-    editContestantModalHide:boolean=false;
+    selectedDistrict:string="1";
+    title:string='';
+    editGender:string='';
+    removeImagePreview:boolean=false;
+
+    @ViewChild('uploadComponentAdd')
+    private uploadComponentAdd: FileUploadComponent;
+    @ViewChild('uploadComponentEdit')
+    private uploadComponentEdit: FileUploadComponent;
 
     private sortIcon = {
         Name: "asc",
@@ -43,15 +54,18 @@ export class ContestantComponent extends DialogComponent<Contestant, string> imp
 
     promptMessage:string = '';
 
-    constructor(
-       private dialogServiceContestant:DialogService, @Inject(DOCUMENT) private document: Document,private contestantService:ContestantService) {
-        super(dialogServiceContestant);
+    constructor(@Inject(DOCUMENT) private document: Document,private contestantService:ContestantService) {
+        ;
         this.objContestantAdd = new Contestant();
         this.addIsActive = false;        
     }
 
     ngAfterViewInit(): void {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+        this.uploadComponentAdd.showImageComponent("Upload Image (200 x 200 Pixels; Max 2 mb)");
+        this.uploadComponentEdit.showImageComponent("Upload Image (200 x 200 Pixels; Max 2 mb)");
+        
         this.reloadData();
     }
 
@@ -64,7 +78,7 @@ export class ContestantComponent extends DialogComponent<Contestant, string> imp
             Contestant => {
                 this.objContestantList= Contestant.Contestant;
                 
-        console.log(this.objContestantList);
+        // console.log(this.objContestantList);
                 this.objContestantListLength=this.objContestantList.length;
                 this.objDistrictList=Contestant.Districts;
                 this.loadingData = false;
@@ -75,49 +89,144 @@ export class ContestantComponent extends DialogComponent<Contestant, string> imp
             });
     }
 
-    showPromptEdit(contestant:Contestant) {
-        let editIsActive;
+    showPromptEdit(contestant:Contestant):void{        
         if(contestant.is_active=="1"){
-            editIsActive=true;
+            this.editIsActive=true;
         }else{
-            editIsActive=false;
+            this.editIsActive=false;
         }
-    this.dialogServiceContestant.addDialog(PromptComponent,{
-    title:'Contestant Edit Form',
-    objContestantEdit:contestant,
-    editContestantModal:true,
-    objDistrictList:this.objDistrictList,
-    editIsActive:editIsActive,
-    editGender:contestant.gender
-    })
-      .subscribe(
-          Contestant => {
+        if(this.removeImagePreview){            
+            this.removeImagePreview=!this.removeImagePreview;
+        }
 
-            },
-            error => {
-                alert('Error loading data.')
-                this.loadingData = false;
-            }
-      );
-  }
+        this.title='Contestant Edit Form';
+        this.objContestantEdit=contestant;
+        this.objDistrictList=this.objDistrictList;
+        this.editGender=contestant.gender;
+        this.showEditDialog=!this.showEditDialog;
 
-  showPromptAdd() {
-    this.dialogServiceContestant.addDialog(PromptComponent,{
-    title:'Contestant Add Form',
-    addContestantModal:true,
-    objDistrictList:this.objDistrictList
-    })
-      .subscribe(
-          Contestant => {
+        //image upload
+        // this.objContestantEdit.PhotoPreview = contestant.photo_url;
+        this.uploadComponentEdit.resetImageComponent();
+        this.objContestantEdit.ImageDeletedOnEdit = false;
+        // this.uploadComponentEdit.initDataImage(contestant.photo_url, "http://localhost/contestant/uploads/contestant/" + contestant.photo_url);
+        
+    }
 
-            },
-            error => {
-                alert('Error loading data.')
-                this.loadingData = false;
-            }
-      );
-  }
+    showPromptAdd():void {
+            this.title='Contestant Add Form';
+            this.showDialog =!this.showDialog;
+            this.objContestantAdd.district_id="1";
+            this.objDistrictList=this.objDistrictList;            
+            this.uploadComponentAdd.resetImageComponent();
+            // this.objContestantAdd.ImageDeletedOnEdit= false;
+    }
 
+    addContestant(): void {
+            // if (this.editIsActive) {
+            //     this.objContestantEdit.IsActive = 1;
+            // } else {
+            //     this.objContestantEdit.IsActive = 0;
+            // }
+            // if (this.validationService.Contestant(this.objContestantEdit)) { 
+            //     console.log(this.objContestantAdd.district_id);  
+            // this.objContestantAdd.district_id=this.objDistrictList.find(x => x.name ===this.objContestantAdd.district_id);
+              
+            console.log(this.objContestantAdd.district_id);
+                this.savingAddData = true;
+
+                if(this.objContestantAdd.is_active){
+                    this.objContestantAdd.is_active="1";
+                }else{
+                    this.objContestantAdd.is_active="0";
+                }
+                let operation: Observable<Contestant>;
+
+                operation = this.contestantService.addContestant(this.objContestantAdd);
+                operation.subscribe(
+                    
+                    user => {
+                        // this.goToTop();
+                        this.reloadData();
+                        this.savingAddData = false;
+                        setTimeout(
+                        //     ()
+                        //  => {
+                        //     this.clearEditForm();
+                        // },
+                         200);
+                    },
+                    error => {
+                        // this.alertService.alertWarning(error)
+                        alert(error);
+                        this.savingAddData = false;
+                    });
+
+                    this.showDialog=!this.showDialog;
+    // }
+    }
+
+    updateContestant(): void {
+            // if (this.editIsActive) {
+            //     this.objContestantEdit.IsActive = 1;
+            // } else {
+            //     this.objContestantEdit.IsActive = 0;
+            // }
+            // if (this.validationService.Contestant(this.objContestantEdit)) {            
+                this.savingEditData = true;
+                let operation: Observable<Contestant>;
+
+                operation = this.contestantService.updateContestant(this.objContestantEdit);
+                operation.subscribe(
+                    
+                    user => {
+                        // this.goToTop();
+                        this.reloadData();
+                        this.savingEditData = true;
+                        // setTimeout(() => {
+                        //     this.clearEditForm();
+                        // }, 200);
+                    },
+                    error => {
+                        // this.alertService.alertWarning(error)
+                        alert(error);
+                        console.log(error);
+                        this.savingEditData = false;
+                    });
+
+                    this.showEditDialog=!this.showEditDialog;
+    // }
+    }
+
+    removeImage():void{
+        this.removeImagePreview=!this.removeImagePreview;
+    }
+
+    uploadAddImage(imageFile: File) {
+        this.objContestantAdd.photo = imageFile;
+    }
+
+    uploadEditImage(imageFile: File) {
+        this.objContestantEdit.photo = imageFile;
+        if (!imageFile) {
+            this.objContestantEdit.ImageDeletedOnEdit = true;
+        }
+    }
+
+    gender(gender:string){
+        this.objContestantAdd.gender=gender;
+    }
+
+    close(action:string):void{
+        if(action=='add'){
+            this.showDialog=false;
+            this.savingAddData=false;
+        }else{
+            this.showEditDialog=!this.showEditDialog;
+            this.savingEditData=!this.savingEditData;
+        }
+    }
+    
   
 
     // getRegions() {
@@ -161,35 +270,36 @@ export class ContestantComponent extends DialogComponent<Contestant, string> imp
     //     }
     // }
 
-    // saveEditData(): void {
+    saveEditData(): void {
 
-    //     if (this.editIsActive) {
-    //         this.objContestantEdit.IsActive = 1;
-    //     } else {
-    //         this.objContestantEdit.IsActive = 0;
-    //     }
-    //     if (this.validationService.Contestant(this.objContestantEdit)) {
+        // if (this.editIsActive) {
+        //     this.objContestantEdit.IsActive = 1;
+        // } else {
+        //     this.objContestantEdit.IsActive = 0;
+        // }
+        // if (this.validationService.Contestant(this.objContestantEdit)) {
 
-    //         this.savingEditData = true;
-    //         let operation: Observable<Contestant>;
-    //         operation = this.ContestantService.updateContestant(this.objContestantEdit);
-    //         operation.subscribe(
-    //             user => {
-    //                 this.goToTop();
-    //                 this.reloadData();
-    //                 this.savingEditData = false;
-    //                 setTimeout(() => {
-    //                     this.clearEditForm();
-    //                 }, 200);
+            this.savingEditData = true;
+            let operation: Observable<Contestant>;
+            operation = this.contestantService.updateContestant(this.objContestantEdit);
+            operation.subscribe(
+                user => {
+                    // this.goToTop();
+                    this.reloadData();
+                    this.savingEditData = false;
+                    setTimeout(() => {
+                        // this.clearEditForm();
+                    }, 200);
 
 
-    //             },
-    //             error => {
-    //                 this.alertService.alertWarning(error)
-    //                 this.savingEditData = false;
-    //             });
-    //     }
-    // }
+                },
+                error => {
+                    // this.alertService.alertWarning(error)
+                    alert(error);
+                    this.savingEditData = false;
+                });
+        // }
+    }
 
     // editData(objContestant: Contestant): void {
     //     this.clearEditForm();
